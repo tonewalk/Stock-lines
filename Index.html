@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Record Prices</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; padding: 0.5em; text-align: left; }
+    th { background-color: #f4f4f4; }
+  </style>
+</head>
+<body>
+  <h1>Available Records</h1>
+  <table id="price-table">
+    <thead>
+      <tr>
+        <th>Stock #</th>
+        <th>Artist</th>
+        <th>Title</th>
+        <th>Format</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Rows inserted dynamically -->
+    </tbody>
+  </table>
+
+  <script>
+    fetch("prices.csv")
+      .then(res => res.text())
+      .then(text => {
+        const rows = text.trim().split("\n").slice(1); // skip header
+        const tbody = document.querySelector("#price-table tbody");
+        rows.forEach(row => {
+          const [stock, artist, title, format, price] = row.split(",");
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${stock}</td>
+            <td>${artist}</td>
+            <td>${title}</td>
+            <td>${format}</td>
+            <td>£${price}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
+  </script>
+</body>
+</html>
